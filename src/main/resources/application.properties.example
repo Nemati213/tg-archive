@@ -1,0 +1,21 @@
+spring.datasource.url=jdbc:postgresql://localhost:5432/tg_archive
+spring.datasource.username=postgres
+spring.datasource.password=change_me
+spring.jpa.hibernate.ddl-auto=update
+
+# Absolute path to the Telegram Desktop export directory.
+app.export.root-path=C:/path/to/telegram-export/
+
+spring.jpa.properties.hibernate.jdbc.batch_size=50
+spring.jpa.properties.hibernate.order_inserts=true
+spring.jpa.properties.hibernate.default_batch_fetch_size=20
+spring.jackson.deserialization.adjust-dates-to-context-time-zone=false
+
+app.chat.timezone=Europe/Moscow
+app.chat.owner=Your Telegram display name
+
+# Change these credentials before the first launch.
+app.security.admin.username=admin
+app.security.admin.password=change_me
+app.security.user.username=user
+app.security.user.password=change_me
