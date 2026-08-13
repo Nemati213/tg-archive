@@ -1,47 +1,48 @@
 # Telegram Chat Archive
 
-A self-hosted viewer for Telegram Desktop chat exports. It imports exported HTML into PostgreSQL and turns it into a searchable chat timeline with media, replies, notes, and saved reading progress.
+Локальный веб-интерфейс для просмотра истории чатов, экспортированной из Telegram Desktop. Приложение разбирает HTML-файлы экспорта, сохраняет сообщения в PostgreSQL и собирает из них привычную ленту с ответами и вложениями.
 
-I built this project to make large Telegram exports easier to browse after they leave the Telegram client. The importer keeps message relationships and attachments intact, while the web interface stays close to the familiar chat layout.
+Проект появился из простой проблемы: большие архивы Telegram неудобно читать как набор отдельных HTML-файлов. Здесь их можно загрузить один раз, а дальше искать сообщения, переходить по датам и продолжать чтение с сохранённого места.
 
-## What it can do
+## Возможности
 
-- parse multi-file HTML exports from Telegram Desktop;
-- display photos, videos, voice messages, stickers, files, and locations;
-- preserve replies and forwarded-message attribution;
-- filter messages by author, text, and date range;
-- jump directly to a message or date;
-- attach personal notes to messages;
-- save reading progress for each user;
-- protect the archive with role-based authentication.
+- импорт многостраничных HTML-экспортов Telegram Desktop;
+- отображение фотографий, видео, голосовых сообщений, стикеров, файлов и геолокаций;
+- сохранение связей между ответами и исходными сообщениями;
+- отображение пересланных сообщений;
+- фильтрация по автору, тексту и диапазону дат;
+- переход к конкретному сообщению или дню;
+- личные заметки к сообщениям;
+- сохранение позиции чтения для каждого пользователя;
+- авторизация и разделение ролей пользователей.
 
-## Stack
+## Стек
 
-- Java 17 and Spring Boot 3
-- Spring Data JPA and PostgreSQL
+- Java 17 и Spring Boot 3
+- Spring Data JPA и PostgreSQL
 - Spring Security
 - Jsoup
-- Vanilla JavaScript and Tailwind CSS
+- JavaScript и Tailwind CSS
 
-## Run locally
+## Запуск
 
-You will need Java 17, Maven, PostgreSQL, and an HTML export produced by Telegram Desktop.
+Понадобятся Java 17, Maven, PostgreSQL и архив чата в формате HTML.
 
-1. Create a PostgreSQL database, for example `tg_archive`.
-2. Copy `src/main/resources/application.properties.example` to `src/main/resources/application.properties`.
-3. Set the database credentials, the absolute export path, your Telegram display name, and new login passwords.
-4. Start the application:
+1. Создайте базу данных PostgreSQL, например `tg_archive`.
+2. Скопируйте `src/main/resources/application.properties.example` в `src/main/resources/application.properties`.
+3. Укажите подключение к базе данных, абсолютный путь к экспорту, своё имя в Telegram и новые пароли для локальных учётных записей.
+4. Запустите приложение:
 
    ```bash
    mvn spring-boot:run
    ```
 
-5. Open `http://localhost:8080` and sign in with one of the accounts from your local configuration.
+5. Откройте `http://localhost:8080` и войдите под одной из учётных записей из локального конфига.
 
-On startup, the application scans the export, imports messages in batches, and links replies. Repeated launches skip messages that are already stored.
+При запуске приложение просматривает файлы экспорта, загружает новые сообщения пакетами и восстанавливает связи между ответами. Уже импортированные сообщения повторно не добавляются.
 
-## Exporting a chat from Telegram
+## Как получить архив Telegram
 
-In Telegram Desktop, open the chat menu and choose **Export chat history**. Select HTML as the format and keep the generated directory structure unchanged. Point `app.export.root-path` to that directory.
+В Telegram Desktop откройте меню нужного чата и выберите **Экспорт истории чата**. В качестве формата укажите HTML и не меняйте структуру созданной папки. Путь к ней нужно записать в параметр `app.export.root-path`.
 
-The real `application.properties` file is ignored by Git. Keep database passwords and archive paths there, not in the example config.
+Настоящий `application.properties` игнорируется Git. Пароли, локальные пути и данные подключения к базе не следует добавлять в пример конфига.
